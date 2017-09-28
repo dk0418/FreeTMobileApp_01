@@ -1,28 +1,23 @@
 package com.example.pc.tabmenutest2;
 
 
-import android.app.Fragment;
+
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
-
 
 import java.lang.reflect.Field;
 
-import static com.example.pc.tabmenutest2.R.id.navigation_home;
-
 public class MainActivity extends AppCompatActivity {
+
     String info="";
     BottomNavigationView Mainnavigation;
     Intent it;
@@ -34,12 +29,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Mainnavigation = (BottomNavigationView) findViewById(R.id.Main_navigation);
         Mainnavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         disableShiftMode(Mainnavigation); // 메뉴4개 호출
         Mainnavigation.setVisibility(View.VISIBLE);
         // 임의로 액티비티 호출 시점에 어느 프레그먼트를 프레임레이아웃에 띄울 것인지를 정함
-        callFragment(FRAGMENT1);
+        callFragment(FRAGMENT_HOME);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -50,56 +46,53 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
 
-                case navigation_home:
-
-                    return true;
+                case R.id.navigation_home:
+                    callFragment(FRAGMENT_HOME);
+                    break;
                 case R.id.navigation_allMenu:
-
-                    return true;
+                    callFragment(FRAGMENT_ALL);
+                    break;
                 case R.id.navigation_myPage:
-
-                    return true;
+                    callFragment(FRAGMENT_MY);
+                    break;
                 case R.id.navigation_login:
                     it = new Intent(MainActivity.this , LoginActivity.class);
                     startActivity(it);
                     Log.d("info1",info);
-                    return true;
+                    break;
             }
             return false;
         }
     };
-    private void callFragment(int frament_no){
+    private void callFragment(int frament_no) {
 
         // 프래그먼트 사용을 위해
-        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-        switch (frament_no){
+        switch (frament_no) {
             case 1:
                 // '프래그먼트1' 호출
-                Fragment1 fragment1 = new Fragment1();
-                transaction.replace(R.id.fragment_container, fragment1);
+                HomeFragment homefragment = new HomeFragment();
+                transaction.replace(R.id.content, homefragment);
+                transaction.addToBackStack(null);
                 transaction.commit();
                 break;
-
             case 2:
                 // '프래그먼트2' 호출
-                Fragment2 fragment2 = new Fragment2();
-                transaction.replace(R.id.fragment_container, fragment2);
+                AllMenuFragment menufragment = new AllMenuFragment();
+                transaction.replace(R.id.content, menufragment);
+                transaction.addToBackStack(null);
                 transaction.commit();
                 break;
             case 3:
                 // '프래그먼트2' 호출
-                Fragment3 fragment3 = new Fragment3();
-                transaction.replace(R.id.fragment_container, fragment3);
-                transaction.commit();
-                break;
-            case 4:
-                // '프래그먼트2' 호출
-                Fragment4 fragment4 = new Fragment4();
-                transaction.replace(R.id.fragment_container, fragment4);
+                MyPageFragment mypagefragment = new MyPageFragment();
+                transaction.replace(R.id.content, mypagefragment);
+                transaction.addToBackStack(null);
                 transaction.commit();
                 break;
         }
+    }
 
     // 메뉴 4개 이상 고정 메소드
     public static void disableShiftMode(BottomNavigationView view) {

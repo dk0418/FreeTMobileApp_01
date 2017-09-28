@@ -20,7 +20,6 @@ import static com.example.pc.tabmenutest2.R.id.navigation_home;
 public class DPMainActivity extends AppCompatActivity {
     String info="";
     BottomNavigationView DPnavigation;
-    private TextView mTextMessage;
     Intent it;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
